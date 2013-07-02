@@ -288,12 +288,20 @@ sizeHint() const
 {
   QFontMetrics fm(font());
 
-  int w = 10, h = 10;
+  int h = fm.height() + 4;
+  int w = 0;
 
-  if (orientation() == Qt::Horizontal)
-    h = fm.height() + 4;
-  else
-    w = fm.height() + 4;
+  w += buttons_.size()*h;
+
+  if (! icon().isNull()) w += h;
+
+  if (! title().isEmpty())
+    w += fm.width(title());
+
+  w = std::max(w, h);
+
+  if (orientation() != Qt::Horizontal)
+    std::swap(w, h);
 
   return QSize(w, h);
 }
@@ -302,7 +310,20 @@ QSize
 CQTitleBar::
 minimumSizeHint() const
 {
-  return sizeHint();
+  QFontMetrics fm(font());
+
+  int w, h;
+
+  if (orientation() == Qt::Horizontal) {
+    h = fm.height() + 4;
+    w = h;
+  }
+  else {
+    w = fm.height() + 4;
+    h = w;
+  }
+
+  return QSize(w, h);
 }
 
 //------
