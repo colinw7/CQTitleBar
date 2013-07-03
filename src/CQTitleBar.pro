@@ -8,7 +8,7 @@ CONFIG += staticlib
 
 # Input
 HEADERS += \
-CQTitleBar.h
+../include/CQTitleBar.h
 
 SOURCES += \
 CQTitleBar.cpp
@@ -17,4 +17,4 @@ OBJECTS_DIR = ../obj
 
 DESTDIR = ../lib
 
-INCLUDEPATH += .
+INCLUDEPATH += . ../include
