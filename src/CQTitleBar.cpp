@@ -190,7 +190,11 @@ paintEvent(QPaintEvent *)
 
   int bw = (orientation() == Qt::Horizontal ? height() - 4 : width() - 4);
 
-  int nb = buttons_.size();
+  int nb = 0;
+
+  for (uint i = 0; i < buttons_.size(); ++i)
+    if (buttons_[i]->isVisible())
+      ++nb;
 
   if (orientation() == Qt::Horizontal)
     p.fillRect(QRect(width() - nb*bw, 0, nb*bw, height()), bgColor);
@@ -232,6 +236,9 @@ updateLayout()
 
   for (int i = nb - 1; i >= 0; --i) {
     CQTitleBarButton *button = buttons_[i];
+
+    if (! button->isVisible())
+      continue;
 
     if (orientation() == Qt::Horizontal) {
       int dh = height() - button->height();
@@ -291,7 +298,13 @@ sizeHint() const
   int h = fm.height() + 4;
   int w = 0;
 
-  w += buttons_.size()*h;
+  int nb = 0;
+
+  for (uint i = 0; i < buttons_.size(); ++i)
+    if (buttons_[i]->isVisible())
+      ++nb;
+
+  w += nb*h;
 
   if (! icon().isNull()) w += h;
 
