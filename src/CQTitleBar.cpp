@@ -232,7 +232,7 @@ updateLayout()
 
   int nb = buttons_.size();
 
-  int pos = (orientation() == Qt::Horizontal ? width() : 0);
+  int pos = (orientation() == Qt::Horizontal ? width() - 2 : 2);
 
   for (int i = nb - 1; i >= 0; --i) {
     CQTitleBarButton *button = buttons_[i];
