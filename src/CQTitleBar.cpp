@@ -289,6 +289,24 @@ drawTitleBarLines(QPainter *p, const QRect &r, const QColor &c)
   }
 }
 
+bool
+CQTitleBar::
+insideTitle(const QPoint &pos) const
+{
+  int bw = (orientation() == Qt::Horizontal ? height() - 4 : width() - 4);
+
+  int nb = 0;
+
+  for (uint i = 0; i < buttons_.size(); ++i)
+    if (buttons_[i]->isVisible())
+      ++nb;
+
+  if (orientation() == Qt::Horizontal)
+    return (pos.x() < width() - nb*bw - 4);
+  else
+    return (pos.y() > nb*bw + 4);
+}
+
 QSize
 CQTitleBar::
 sizeHint() const
@@ -364,6 +382,7 @@ paintEvent(QPaintEvent *)
 
   QStyleOptionToolButton opt;
 
+#if 0
   opt.initFrom(this);
 
   opt.iconSize = iconSize(); //default value
@@ -390,8 +409,9 @@ paintEvent(QPaintEvent *)
 
   opt.pos  = pos();
   opt.font = font();
-
+#else
   initStyleOption(&opt);
+#endif
 
   if (bar_ && bar_->orientation() == Qt::Vertical) {
     p.translate(0, height());

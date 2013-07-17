@@ -47,6 +47,8 @@ class CQTitleBar : public QWidget {
   // add button
   void addButton(CQTitleBarButton *button);
 
+  bool insideTitle(const QPoint &pos) const;
+
  protected:
   void showEvent(QShowEvent *);
 
