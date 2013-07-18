@@ -12,6 +12,7 @@ class CQTitleBar : public QWidget {
   Q_PROPERTY(QString         title           READ title           WRITE setTitle          )
   Q_PROPERTY(QIcon           icon            READ icon            WRITE setIcon           )
   Q_PROPERTY(Qt::Orientation orientation     READ orientation     WRITE setOrientation    )
+  Q_PROPERTY(int             border          READ border          WRITE setBorder         )
   Q_PROPERTY(QColor          backgroundColor READ backgroundColor WRITE setBackgroundColor)
   Q_PROPERTY(QColor          barColor        READ barColor        WRITE setBarColor       )
 
@@ -32,6 +33,10 @@ class CQTitleBar : public QWidget {
   // set/get orientation
   Qt::Orientation orientation() const { return orient_; }
   void setOrientation(Qt::Orientation orient);
+
+  // set/get border
+  virtual int border() const { return border_; }
+  virtual void setBorder(int border);
 
   // set/get background color
   virtual QColor backgroundColor() const { return bgColor_; }
@@ -71,11 +76,13 @@ class CQTitleBar : public QWidget {
   QString         title_;
   QIcon           icon_;
   Qt::Orientation orient_;
+  int             border_;
   QColor          bgColor_;
   QColor          barColor_;
   Buttons         buttons_;
 };
 
+// title bar button
 class CQTitleBarButton : public QToolButton {
  public:
   CQTitleBarButton(QWidget *parent=0);

@@ -4,22 +4,25 @@
 #include <QStylePainter>
 #include <QStyleOptionToolButton>
 
+// create title bar
 CQTitleBar::
 CQTitleBar(Qt::Orientation orient, QWidget *parent) :
- QWidget(parent), title_(), icon_(), orient_(orient),
+ QWidget(parent), title_(), icon_(), orient_(orient), border_(2),
  bgColor_(160,160,160), barColor_(120,120,120), buttons_()
 {
   setObjectName("title");
 }
 
+// create title bar (swapped args)
 CQTitleBar::
 CQTitleBar(QWidget *parent, Qt::Orientation orient) :
- QWidget(parent), title_(), icon_(), orient_(orient),
+ QWidget(parent), title_(), icon_(), orient_(orient), border_(2),
  bgColor_(160,160,160), barColor_(120,120,120), buttons_()
 {
   setObjectName("title");
 }
 
+// set title
 void
 CQTitleBar::
 setTitle(const QString &title)
@@ -30,6 +33,7 @@ setTitle(const QString &title)
     update();
 }
 
+// set icon
 void
 CQTitleBar::
 setIcon(const QIcon &icon)
@@ -40,15 +44,29 @@ setIcon(const QIcon &icon)
     update();
 }
 
+// set orientation
 void
 CQTitleBar::
 setOrientation(Qt::Orientation orient)
 {
   orient_ = orient;
 
-  updateLayout();
+  if (isVisible())
+    updateLayout();
 }
 
+// set border
+void
+CQTitleBar::
+setBorder(int border)
+{
+  border_ = border;
+
+  if (isVisible())
+    updateLayout();
+}
+
+// set background color
 void
 CQTitleBar::
 setBackgroundColor(const QColor &color)
@@ -59,6 +77,7 @@ setBackgroundColor(const QColor &color)
     update();
 }
 
+// set title bar line color
 void
 CQTitleBar::
 setBarColor(const QColor &color)
@@ -69,6 +88,7 @@ setBarColor(const QColor &color)
     update();
 }
 
+// add icon button
 CQTitleBarButton *
 CQTitleBar::
 addButton(const QIcon &icon)
@@ -82,6 +102,7 @@ addButton(const QIcon &icon)
   return button;
 }
 
+// add button widget
 void
 CQTitleBar::
 addButton(CQTitleBarButton *button)
@@ -95,6 +116,7 @@ addButton(CQTitleBarButton *button)
   updateLayout();
 }
 
+// handle show event
 void
 CQTitleBar::
 showEvent(QShowEvent *)
@@ -102,10 +124,14 @@ showEvent(QShowEvent *)
   updateLayout();
 }
 
+// handle paint event
 void
 CQTitleBar::
 paintEvent(QPaintEvent *)
 {
+  int b  = border();
+  int b1 = std::max(b, 1);
+
   QPainter p(this);
 
   QColor bgColor = this->backgroundColor();
@@ -123,13 +149,13 @@ paintEvent(QPaintEvent *)
 
   if (orientation() == Qt::Horizontal) {
     if (! icon.isNull()) {
-      int ps = height() - 4;
+      int ps = height() - 2*b1;
 
-      p.fillRect(QRect(x, 0, ps + 4, height()), bgColor);
+      p.fillRect(QRect(x, 0, ps + 2*b1, height()), bgColor);
 
       p.drawPixmap(x + 2, 2, icon.pixmap(QSize(ps,ps)));
 
-      x += ps + 4;
+      x += ps + 2*b1;
     }
 
     if (! title.isEmpty()) {
@@ -149,9 +175,9 @@ paintEvent(QPaintEvent *)
     int y = height() - 1;
 
     if (! icon.isNull()) {
-      int ps = width() - 4;
+      int ps = width() - 2*b1;
 
-      p.fillRect(QRect(0, y - ps - 4, width(), ps + 4), bgColor);
+      p.fillRect(QRect(0, y - ps - 2*b1, width(), ps + 2*b1), bgColor);
 
       p.save();
 
@@ -163,8 +189,8 @@ paintEvent(QPaintEvent *)
 
       p.restore();
 
-      y -= ps + 4;
-      x += ps + 4;
+      y -= ps + 2*b1;
+      x += ps + 2*b1;
     }
 
     if (! title.isEmpty()) {
@@ -188,7 +214,7 @@ paintEvent(QPaintEvent *)
     }
   }
 
-  int bw = (orientation() == Qt::Horizontal ? height() - 4 : width() - 4);
+  int bw = (orientation() == Qt::Horizontal ? height() - 2*b1 : width() - 2*b1);
 
   int nb = 0;
 
@@ -202,6 +228,7 @@ paintEvent(QPaintEvent *)
     p.fillRect(QRect(0, 0, width(), nb*bw), bgColor);
 }
 
+// handle resize event
 void
 CQTitleBar::
 resizeEvent(QResizeEvent *)
@@ -209,26 +236,30 @@ resizeEvent(QResizeEvent *)
   updateLayout();
 }
 
+// update layout
 void
 CQTitleBar::
 updateLayout()
 {
   if (! isVisible()) return;
 
+  int b  = border();
+  int b1 = std::max(b, 1);
+
   QFontMetrics fm(font());
 
   if (orientation() == Qt::Horizontal) {
-    setFixedHeight(fm.height() + 4);
+    setFixedHeight(fm.height() + 2*b);
     setMinimumWidth(0); setMaximumWidth(QWIDGETSIZE_MAX);
   }
   else {
-    setFixedWidth(fm.height() + 4);
+    setFixedWidth(fm.height() + 2*b);
     setMinimumHeight(0); setMaximumHeight(QWIDGETSIZE_MAX);
   }
 
   //------
 
-  int bw = (orientation() == Qt::Horizontal ? height() - 4 : width() - 4);
+  int bw = (orientation() == Qt::Horizontal ? height() - 2*b1 : width() - 2*b1);
 
   int nb = buttons_.size();
 
@@ -257,6 +288,7 @@ updateLayout()
   }
 }
 
+// draw title lines
 void
 CQTitleBar::
 drawTitleBarLines(QPainter *p, const QRect &r, const QColor &c)
@@ -289,11 +321,15 @@ drawTitleBarLines(QPainter *p, const QRect &r, const QColor &c)
   }
 }
 
+// check if point inside title (not in button area)
 bool
 CQTitleBar::
 insideTitle(const QPoint &pos) const
 {
-  int bw = (orientation() == Qt::Horizontal ? height() - 4 : width() - 4);
+  int b  = border();
+  int b1 = std::max(b, 1);
+
+  int bw = (orientation() == Qt::Horizontal ? height() - 2*b1 : width() - 2*b1);
 
   int nb = 0;
 
@@ -302,18 +338,21 @@ insideTitle(const QPoint &pos) const
       ++nb;
 
   if (orientation() == Qt::Horizontal)
-    return (pos.x() < width() - nb*bw - 4);
+    return (pos.x() < width() - nb*bw - 2*b1);
   else
-    return (pos.y() > nb*bw + 4);
+    return (pos.y() > nb*bw + 2*b1);
 }
 
+// return size hint
 QSize
 CQTitleBar::
 sizeHint() const
 {
+  int b = border();
+
   QFontMetrics fm(font());
 
-  int h = fm.height() + 4;
+  int h = fm.height() + 2*b;
   int w = 0;
 
   int nb = 0;
@@ -337,20 +376,23 @@ sizeHint() const
   return QSize(w, h);
 }
 
+// return minimum size hint
 QSize
 CQTitleBar::
 minimumSizeHint() const
 {
+  int b = border();
+
   QFontMetrics fm(font());
 
   int w, h;
 
   if (orientation() == Qt::Horizontal) {
-    h = fm.height() + 4;
+    h = fm.height() + 2*b;
     w = h;
   }
   else {
-    w = fm.height() + 4;
+    w = fm.height() + 2*b;
     h = w;
   }
 
@@ -359,6 +401,7 @@ minimumSizeHint() const
 
 //------
 
+// create title button
 CQTitleBarButton::
 CQTitleBarButton(QWidget *parent) :
  QToolButton(parent), bar_(0)
@@ -374,6 +417,7 @@ CQTitleBarButton(QWidget *parent) :
   setCursor(Qt::ArrowCursor);
 }
 
+// handle draw
 void
 CQTitleBarButton::
 paintEvent(QPaintEvent *)
