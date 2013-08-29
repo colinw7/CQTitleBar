@@ -20,7 +20,7 @@ class CQTitleBar : public QWidget {
   CQTitleBar(Qt::Orientation orient=Qt::Horizontal, QWidget *parent=0);
   CQTitleBar(QWidget *parent, Qt::Orientation orient=Qt::Horizontal);
 
-  virtual ~CQTitleBar() { };
+  virtual ~CQTitleBar() { }
 
   // set/get title
   virtual QString title() const { return title_; }
