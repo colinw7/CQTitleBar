@@ -4,6 +4,8 @@ TARGET = CQTitleBar
 
 DEPENDPATH += .
 
+QT += widgets
+
 CONFIG += staticlib
 
 # Input
