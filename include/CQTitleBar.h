@@ -55,20 +55,20 @@ class CQTitleBar : public QWidget {
   bool insideTitle(const QPoint &pos) const;
 
  protected:
-  void showEvent(QShowEvent *);
+  void showEvent(QShowEvent *) override;
 
-  void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *) override;
 
-  void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *) override;
 
   void updateLayout();
 
   void drawTitleBarLines(QPainter *p, const QRect &r, const QColor &c);
 
  public:
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 
-  QSize minimumSizeHint() const;
+  QSize minimumSizeHint() const override;
 
  private:
   typedef std::vector<CQTitleBarButton *> Buttons;
@@ -90,7 +90,7 @@ class CQTitleBarButton : public QToolButton {
   void setTitleBar(CQTitleBar *bar) { bar_ = bar; }
 
  private:
-  void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *) override;
 
  private:
   CQTitleBar *bar_;
