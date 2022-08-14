@@ -261,12 +261,12 @@ updateLayout()
 
   int bw = (orientation() == Qt::Horizontal ? height() - 2*b1 : width() - 2*b1);
 
-  int nb = buttons_.size();
+  int nb = int(buttons_.size());
 
   int pos = (orientation() == Qt::Horizontal ? width() - 2 : 2);
 
   for (int i = nb - 1; i >= 0; --i) {
-    CQTitleBarButton *button = buttons_[i];
+    auto *button = buttons_[uint(i)];
 
     if (! button->isVisible())
       continue;
