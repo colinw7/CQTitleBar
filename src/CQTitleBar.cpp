@@ -8,7 +8,7 @@
 CQTitleBar::
 CQTitleBar(Qt::Orientation orient, QWidget *parent) :
  QWidget(parent), title_(), icon_(), orient_(orient), border_(2),
- bgColor_(160,160,160), barColor_(120,120,120), buttons_()
+ bgColor_(160, 160, 160), barColor_(120, 120, 120), buttons_()
 {
   setObjectName("title");
 }
@@ -17,7 +17,7 @@ CQTitleBar(Qt::Orientation orient, QWidget *parent) :
 CQTitleBar::
 CQTitleBar(QWidget *parent, Qt::Orientation orient) :
  QWidget(parent), title_(), icon_(), orient_(orient), border_(2),
- bgColor_(160,160,160), barColor_(120,120,120), buttons_()
+ bgColor_(160, 160, 160), barColor_(120, 120, 120), buttons_()
 {
   setObjectName("title");
 }
@@ -153,7 +153,7 @@ paintEvent(QPaintEvent *)
 
       p.fillRect(QRect(x, 0, ps + 2*b1, height()), bgColor);
 
-      p.drawPixmap(x + 2, 2, icon.pixmap(QSize(ps,ps)));
+      p.drawPixmap(x + 2, 2, icon.pixmap(QSize(ps, ps)));
 
       x += ps + 2*b1;
     }
@@ -161,7 +161,7 @@ paintEvent(QPaintEvent *)
     if (! title.isEmpty()) {
       QFontMetrics fm(font());
 
-      int tw = fm.width(title);
+      int tw = fm.horizontalAdvance(title);
       int th = fm.boundingRect(title).height();
 
       p.fillRect(QRect(x, 0, tw + 8, height()), bgColor);
@@ -184,8 +184,8 @@ paintEvent(QPaintEvent *)
       p.translate(0, height());
       p.rotate(-90);
 
-      //p.drawPixmap(2, y - ps - 2, icon.pixmap(QSize(ps,ps)));
-      p.drawPixmap(x + 2, 2, icon.pixmap(QSize(ps,ps)));
+      //p.drawPixmap(2, y - ps - 2, icon.pixmap(QSize(ps, ps)));
+      p.drawPixmap(x + 2, 2, icon.pixmap(QSize(ps, ps)));
 
       p.restore();
 
@@ -196,7 +196,7 @@ paintEvent(QPaintEvent *)
     if (! title.isEmpty()) {
       QFontMetrics fm(font());
 
-      int tw = fm.width(title);
+      int tw = fm.horizontalAdvance(title);
       int th = fm.boundingRect(title).height();
 
       p.save();
@@ -366,7 +366,7 @@ sizeHint() const
   if (! icon().isNull()) w += h;
 
   if (! title().isEmpty())
-    w += fm.width(title());
+    w += fm.horizontalAdvance(title());
 
   w = std::max(w, h);
 
@@ -408,7 +408,7 @@ CQTitleBarButton(QWidget *parent) :
 {
   setObjectName("button");
 
-  setIconSize(QSize(10,10));
+  setIconSize(QSize(10, 10));
 
   setAutoRaise(true);
 
