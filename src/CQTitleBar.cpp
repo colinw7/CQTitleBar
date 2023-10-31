@@ -404,7 +404,7 @@ minimumSizeHint() const
 // create title button
 CQTitleBarButton::
 CQTitleBarButton(QWidget *parent) :
- QToolButton(parent), bar_(0)
+ QToolButton(parent), bar_(nullptr)
 {
   setObjectName("button");
 

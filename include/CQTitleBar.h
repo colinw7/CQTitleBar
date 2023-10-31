@@ -17,7 +17,7 @@ class CQTitleBar : public QWidget {
   Q_PROPERTY(QColor          barColor        READ barColor        WRITE setBarColor       )
 
  public:
-  CQTitleBar(Qt::Orientation orient=Qt::Horizontal, QWidget *parent=0);
+  CQTitleBar(Qt::Orientation orient=Qt::Horizontal, QWidget *parent=nullptr);
   CQTitleBar(QWidget *parent, Qt::Orientation orient=Qt::Horizontal);
 
   virtual ~CQTitleBar() { }
@@ -85,7 +85,7 @@ class CQTitleBar : public QWidget {
 // title bar button
 class CQTitleBarButton : public QToolButton {
  public:
-  CQTitleBarButton(QWidget *parent=0);
+  CQTitleBarButton(QWidget *parent=nullptr);
 
   void setTitleBar(CQTitleBar *bar) { bar_ = bar; }
 
